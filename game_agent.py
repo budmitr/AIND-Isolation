@@ -135,7 +135,13 @@ class CustomPlayer:
             # here in order to avoid timeout. The try/except block will
             # automatically catch the exception raised by the search method
             # when the timer gets close to expiring
-            score, move = getattr(self, self.method)(game, self.search_depth)
+            if self.iterative is True:
+                depth = 1
+                while True:
+                    _, move = getattr(self, self.method)(game, depth)
+                    depth += 1
+            else:
+                _, move = getattr(self, self.method)(game, self.search_depth)
 
         except Timeout:
             # Handle any actions required at timeout, if necessary
