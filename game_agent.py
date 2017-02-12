@@ -135,7 +135,7 @@ class CustomPlayer:
             # here in order to avoid timeout. The try/except block will
             # automatically catch the exception raised by the search method
             # when the timer gets close to expiring
-            score, move = self.minimax(game, self.search_depth)
+            score, move = getattr(self, self.method)(game, self.search_depth)
 
         except Timeout:
             # Handle any actions required at timeout, if necessary
@@ -180,17 +180,13 @@ class CustomPlayer:
 
         # If depth is 0, we are inside a leaf node
         # Just return node score and the move which caused this leaf
-        player = game.active_player if maximizing_player else game.inactive_player
+        self_location = game.get_player_location(self)
         if depth == 0:
-            return self.score(game, player), game.get_player_location(player)
+            return self.score(game, self), self_location
 
-        # Check if subtree has available moves
+        # Check if subtree has available moves. If no moves for maximizing player (us), we lost
         if not len(game.get_legal_moves()):
-            # If maximizing player (our one) has no moves -- we lost!
-            if maximizing_player:
-                return float('-inf'), game.get_player_location(player)
-            else:  # If minimizing player (opponent) has no moves -- we won!
-                return float('inf'), game.get_player_location(player)
+            return (float('-inf'), self_location) if maximizing_player else (float('inf'), self_location)
 
         # If not leaf, get minimax values for branches (with invertd maximizing flag!)
         best_score, best_move = None, None
@@ -198,13 +194,11 @@ class CustomPlayer:
             subgame = game.forecast_move(move)
             score, _ = self.minimax(subgame, depth - 1, not maximizing_player)
             if (best_score is None) or \
-               (maximizing_player is True and score > best_score) or \
-               (maximizing_player is False and score < best_score):
+                    (maximizing_player is True and score > best_score) or \
+                    (maximizing_player is False and score < best_score):
                 best_score, best_move = score, move
 
         return best_score, best_move
-
-
 
     def alphabeta(self, game, depth, alpha=float("-inf"), beta=float("inf"), maximizing_player=True):
         """Implement minimax search with alpha-beta pruning as described in the
@@ -247,5 +241,38 @@ class CustomPlayer:
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
 
-        # TODO: finish this function!
-        raise NotImplementedError
+        # If depth is 0, we are inside a leaf node
+        # Just return node score and the move which caused this leaf
+        self_location = game.get_player_location(self)
+        if depth == 0:
+            return self.score(game, self), self_location
+
+        # Check if subtree has available moves. If no moves for maximizing player (us), we lost
+        if not len(game.get_legal_moves()):
+            return (float('-inf'), self_location) if maximizing_player else (float('inf'), self_location)
+
+        # If not leaf, get values for branches (with invertd maximizing flag!)
+        best_score, best_move = None, None
+        for move in game.get_legal_moves():
+            subgame = game.forecast_move(move)
+            score, _ = self.alphabeta(subgame, depth - 1, alpha, beta, not maximizing_player)
+
+            # First, assign value/move
+            if (best_score is None) or \
+                    (maximizing_player is True and score > best_score) or \
+                    (maximizing_player is False and score < best_score):
+                best_score, best_move = score, move
+
+            # Second -- PRUNING step!
+            # If we exceed alphabeta boundaries, return, prune other for-loop iterations (i.e. branches)
+            if (maximizing_player is True and best_score >= beta) or \
+                    (maximizing_player is False and best_score <= alpha):
+                return best_score, best_move
+
+            # Third -- update alpha/beta if needed
+            if maximizing_player is True and score > alpha:
+                alpha = score
+            if maximizing_player is False and score < beta:
+                beta = score
+
+        return best_score, best_move
