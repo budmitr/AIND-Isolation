@@ -14,6 +14,10 @@ class Timeout(Exception):
     pass
 
 
+def score_num_moves(game, player):
+    return len(game.get_legal_moves(player))
+
+
 def custom_score(game, player):
     """Calculate the heuristic value of a game state from the point of view
     of the given player.
@@ -37,8 +41,7 @@ def custom_score(game, player):
         The heuristic value of the current game state to the specified player.
     """
 
-    # TODO: finish this function!
-    raise NotImplementedError
+    return score_num_moves(game, player)
 
 
 class CustomPlayer:
@@ -118,25 +121,28 @@ class CustomPlayer:
 
         self.time_left = time_left
 
-        # TODO: finish this function!
-
         # Perform any required initializations, including selecting an initial
         # move from the game board (i.e., an opening book), or returning
         # immediately if there are no legal moves
+        move = (-1, -1)
+
+        # If no legal moves left, return (-1, -1) to finish the game
+        if not len(legal_moves):
+            return move
 
         try:
             # The search method call (alpha beta or minimax) should happen in
             # here in order to avoid timeout. The try/except block will
             # automatically catch the exception raised by the search method
             # when the timer gets close to expiring
-            pass
+            score, move = self.minimax(game, self.search_depth)
 
         except Timeout:
             # Handle any actions required at timeout, if necessary
             pass
 
         # Return the best move from the last completed search iteration
-        raise NotImplementedError
+        return move
 
     def minimax(self, game, depth, maximizing_player=True):
         """Implement the minimax search algorithm as described in the lectures.
@@ -172,8 +178,33 @@ class CustomPlayer:
         if self.time_left() < self.TIMER_THRESHOLD:
             raise Timeout()
 
-        # TODO: finish this function!
-        raise NotImplementedError
+        # If depth is 0, we are inside a leaf node
+        # Just return node score and the move which caused this leaf
+        player = game.active_player if maximizing_player else game.inactive_player
+        if depth == 0:
+            return self.score(game, player), game.get_player_location(player)
+
+        # Check if subtree has available moves
+        if not len(game.get_legal_moves()):
+            # If maximizing player (our one) has no moves -- we lost!
+            if maximizing_player:
+                return float('-inf'), game.get_player_location(player)
+            else:  # If minimizing player (opponent) has no moves -- we won!
+                return float('inf'), game.get_player_location(player)
+
+        # If not leaf, get minimax values for branches (with invertd maximizing flag!)
+        best_score, best_move = None, None
+        for move in game.get_legal_moves():
+            subgame = game.forecast_move(move)
+            score, _ = self.minimax(subgame, depth - 1, not maximizing_player)
+            if (best_score is None) or \
+               (maximizing_player is True and score > best_score) or \
+               (maximizing_player is False and score < best_score):
+                best_score, best_move = score, move
+
+        return best_score, best_move
+
+
 
     def alphabeta(self, game, depth, alpha=float("-inf"), beta=float("inf"), maximizing_player=True):
         """Implement minimax search with alpha-beta pruning as described in the
