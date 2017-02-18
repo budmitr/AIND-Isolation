@@ -6,18 +6,13 @@ for final submission.
 
 ## Heuristics used
 
-Terminology used:
-* $S$ -- score returned by heuristic function
-* $S_p$ -- player score within heuristic function
-* $S_o$ -- opponent score within heuristic function
-
 ### `score_moves`
 
 First and very obvious heuristic is `score_moves` which just counts
 available moves of the player and the opponent.
 This one is used already in `improved_score` function by default, so I took an
-idea from lections to not just use $S_p - S_o$, but add some bigger
-multiplier for opponent moves: $S_p - k \times S_o$.
+idea from lections to not just use raw differenct, but add some bigger
+multiplier for opponent moves: `score = player_moves - opponent_scaling_factor * opponent_moves`.
 Values used for tests are `1`, `1.5` and `2`.
 
 ### `score_center`
