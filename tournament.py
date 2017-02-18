@@ -33,6 +33,8 @@ from sample_players import improved_score
 from game_agent import CustomPlayer
 from game_agent import custom_score
 
+import heuristics
+
 NUM_MATCHES = 5  # number of matches against each opponent
 TIME_LIMIT = 150  # number of milliseconds before timeout
 
@@ -161,7 +163,53 @@ def main():
     # relative to the performance of the ID_Improved agent to account for
     # faster or slower computers.
     test_agents = [Agent(CustomPlayer(score_fn=improved_score, **CUSTOM_ARGS), "ID_Improved"),
-                   Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student")]
+                   # Agent(CustomPlayer(score_fn=heuristics.score_moves,
+                   #                    **CUSTOM_ARGS), "Student: score_moves"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves, 1.5),
+                   #                    **CUSTOM_ARGS), "Student: score_moves p-1.5o"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves, 2),
+                   #                    **CUSTOM_ARGS), "Student: score_moves p-2o"),
+                   #
+                   # Agent(CustomPlayer(score_fn=heuristics.score_center,
+                   #                    **CUSTOM_ARGS), "Student: score_center"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_center, 1.5),
+                   #                    **CUSTOM_ARGS), "Student: score_center p-1.5o"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_center, 2),
+                   #                    **CUSTOM_ARGS), "Student: score_center p-2o"),
+                   #
+                   # Agent(CustomPlayer(score_fn=heuristics.score_freecells,
+                   #                    **CUSTOM_ARGS), "Student: score_freecells"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_freecells, 1.5),
+                   #                    **CUSTOM_ARGS), "Student: score_freecells p-1.5o"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_freecells, 2),
+                   #                    **CUSTOM_ARGS), "Student: score_freecells p-2o"),
+                   #
+                   # Agent(CustomPlayer(score_fn=heuristics.score_moves_center,
+                   #                    **CUSTOM_ARGS), "Student: score_moves_center"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves_center, 1.5),
+                   #                    **CUSTOM_ARGS), "Student: score_moves_center p-1.5o"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves_center, 2),
+                   #                    **CUSTOM_ARGS), "Student: score_moves_center p-2o"),
+                   #
+                   # Agent(CustomPlayer(score_fn=heuristics.score_moves_freecells,
+                   #                    **CUSTOM_ARGS), "Student: score_moves_freecells"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves_freecells, 1.5),
+                   #                    **CUSTOM_ARGS), "Student: score_moves_freecells p-1.5o"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves_freecells, 2),
+                   #                    **CUSTOM_ARGS), "Student: score_moves_freecells p-2o"),
+                   #
+                   # Agent(CustomPlayer(score_fn=heuristics.score_moves_center_freecells,
+                   #                    **CUSTOM_ARGS), "Student: score_moves_center_freecells"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves_center_freecells, 1.5),
+                   #                    **CUSTOM_ARGS), "Student: score_moves_center_freecells p-1.5o"),
+                   # Agent(CustomPlayer(score_fn=heuristics.scale(heuristics.score_moves_center_freecells, 2),
+                   #                    **CUSTOM_ARGS), "Student: score_moves_center_freecells p-2o"),
+
+                   # Agent(CustomPlayer(score_fn=heuristics.score_combined,
+                   #                    **CUSTOM_ARGS), "Student: score_combined"),
+
+                   Agent(CustomPlayer(score_fn=custom_score, **CUSTOM_ARGS), "Student")
+    ]
 
     print(DESCRIPTION)
     for agentUT in test_agents:

@@ -6,16 +6,12 @@ augment the test suite with your own test cases to further test your code.
 You must test your agent's strength against a set of agents with known
 relative strength using tournament.py and include the results in your report.
 """
-import random
+import heuristics
 
 
 class Timeout(Exception):
     """Subclass base exception for code clarity."""
     pass
-
-
-def score_num_moves(game, player):
-    return len(game.get_legal_moves(player))
 
 
 def custom_score(game, player):
@@ -41,7 +37,7 @@ def custom_score(game, player):
         The heuristic value of the current game state to the specified player.
     """
 
-    return score_num_moves(game, player)
+    return heuristics.score_moves_center_freecells(game, player, 1.5)
 
 
 class CustomPlayer:
