@@ -84,6 +84,7 @@ Raw results of `tournament.py` represented in Appendix section.
 
 
 | **Heuristic**                  | **Default** | **x1.5** | **x2** | **Comments**                            |
+|--------------------------------|-------------|----------|--------|-----------------------------------------|
 | `ID_improved` -- baseline      | 70.00%      |          |        |                                         |
 | `score_moves`                  | 72.86%      | 82.86%   | 77.14% | 82.86%: minimal is 14-6 vs AB_Improved  |
 | `score_center`                 | 72.14%      | 72.14%   | 75.00% | Not that much good heuristic            |
