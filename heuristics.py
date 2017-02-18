@@ -102,5 +102,19 @@ def score_moves_center_freecells(game, player, opponent_scaling_factor=1):
     return score
 
 
+def score_combined(game, player):
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+
+    move_score = score_moves(game, player, 1.5)
+    center_score = score_center(game, player, 2)
+    cell_score = score_freecells(game, player)
+    score = move_score+ center_score + cell_score
+    return score
+
+
 def scale(fn, factor):
     return lambda game, player: fn(game, player, factor)
