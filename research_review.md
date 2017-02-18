@@ -26,8 +26,8 @@ first time that a Go program has defeated a professinal human player            
 
 But in addition, several intermediate results are also very interesting and promising:
 * Small improvements of supervised deep learning training of `Psigma` can significantly improve strenght of further Go-playing program.
-* Only `Pro` policy network can defean many other programs and is ranked at 2 amateur *dan*.
-* State evaluation function (value network `V`) approaches the accuracy of MonteCarlo rollouts with *15000 less* computations.
+* Only `Pro` policy network can defean many other programs and is ranked at 2 amateur dan.
+* State evaluation function (value network `V`) approaches the accuracy of MonteCarlo rollouts with **15000 less** computations.
 * Having that Go game has significantly more possible states because of its breadth and branching factors, AlphaGo evaluated
   thousands of times fewer position than Deep Blue did in its famous chess match.
 
