@@ -106,6 +106,12 @@ Final heuristic `score_moves_center_freecells` with scaling factor 1.5 is choose
 Highest value is given by simple `score_moves`, but it is much less stable with different scaling factors.
 This high score might be caused by randomness, but `score_moves_center_freecells` seems to be more stable.
 
+Generally, here are specific reasons for taking `score_moves_center_freecells` as resulting heuristic:
+* Best average winning rate among other heuristics -- more than 80%
+* Results of `score_moves_center_freecells` show that underlying idea of focusing on central cells with more open space and more moves around gives better results almost always, regardless to scaling factor. Other heuristic seem to be less robust and dependent on scaling factor.
+* Underlying calculations of `score_moves_center_freecells` include only simple operations, which makes calculations easy and allow deeper tree search
+* Independent internal sub-heuristics usage (see code snippet above) allows easy parallelization for modern multi-core systems.
+
 Recomendations about evaluation functions usage:
 * combine different approaches together, this provides better results as for `score_moves_center_freecells`;
 * not implemented here, but is good to test differerent weighting coefficients for such heuristics within a combination;
